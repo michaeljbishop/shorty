@@ -6,11 +6,6 @@ class EntriesControllerTest < ActionDispatch::IntegrationTest
     @encoded_id = IdEncoder.encoded_id(@entry.id)
   end
 
-  test "should get index" do
-    get entries_url
-    assert_response :success
-  end
-
   test "should get new" do
     get new_entry_url
     assert_response :success
@@ -44,23 +39,5 @@ class EntriesControllerTest < ActionDispatch::IntegrationTest
   test "should show entry" do
     get entry_url(@encoded_id)
     assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_entry_url(@entry)
-    assert_response :success
-  end
-
-  test "should update entry" do
-    patch entry_url(@entry), params: { entry: { url: @entry.url } }
-    assert_redirected_to entry_url(@entry)
-  end
-
-  test "should destroy entry" do
-    assert_difference('Entry.count', -1) do
-      delete entry_url(@entry)
-    end
-
-    assert_redirected_to entries_url
   end
 end

@@ -2,12 +2,11 @@
 
 <p>
   <strong>Url:</strong>
-  <%= "/" + @encoded_id %>
+  <%= link_to redirect_entry_path(@encoded_id), redirect_entry_path(@encoded_id) %>
 </p>
 <p>
   <strong>Redirects to:</strong>
   <%= @entry.url %>
 </p>
 
-<%= link_to 'Edit', edit_entry_path(@entry) %> |
-<%= link_to 'Back', entries_path %>
+<%= link_to 'Create Another', new_entry_path %>
