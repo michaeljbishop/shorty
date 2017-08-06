@@ -1,5 +1,5 @@
 class EntriesController < ApplicationController
-  before_action :set_entry, only: [:show, :edit, :update, :destroy]
+  before_action :set_entry, only: [:show, :edit, :update, :destroy, :redirect]
   protect_from_forgery unless: -> { request.format.json? }
 
   # GET /entries
@@ -11,7 +11,6 @@ class EntriesController < ApplicationController
   # GET /entries/1
   # GET /entries/1.json
   def show
-    redirect_to @entry.url
   end
 
   # GET /entries/new
@@ -27,11 +26,11 @@ class EntriesController < ApplicationController
   # POST /entries.json
   def create
     @entry = Entry.find_by_url(entry_params["url"]) || Entry.new(entry_params)
-
     respond_to do |format|
       if @entry.save
-        format.html { redirect_to @entry, notice: 'Entry was successfully created.' }
-        format.json { render :show, status: :created, location: @entry }
+        @encoded_id = IdEncoder.encoded_id(@entry.id)
+        format.html {redirect_to entry_url(@encoded_id), notice: 'Entry was successfully created.' }
+        format.json { render :show, status: :created, location: entry_url(@encoded_id) }
       else
         format.html { render :new }
         format.json { render json: @entry.errors, status: :unprocessable_entity }
@@ -44,7 +43,7 @@ class EntriesController < ApplicationController
   def update
     respond_to do |format|
       if @entry.update(entry_params)
-        format.html { redirect_to @entry, notice: 'Entry was successfully updated.' }
+        format.html { redirect_to entry_url(@encoded_id), notice: 'Entry was successfully updated.' }
         format.json { render :show, status: :ok, location: @entry }
       else
         format.html { render :edit }
@@ -63,10 +62,15 @@ class EntriesController < ApplicationController
     end
   end
 
+  def redirect
+    redirect_to @entry.url
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_entry
-      @entry = Entry.find(params[:id])
+      @encoded_id = params["id"]
+      @entry = Entry.find(IdEncoder.decoded_id(@encoded_id))
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
