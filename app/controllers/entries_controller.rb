@@ -26,7 +26,7 @@ class EntriesController < ApplicationController
   # POST /entries
   # POST /entries.json
   def create
-    @entry = Entry.new(entry_params)
+    @entry = Entry.find_by_url(entry_params["url"]) || Entry.new(entry_params)
 
     respond_to do |format|
       if @entry.save

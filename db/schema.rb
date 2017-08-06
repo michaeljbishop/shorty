@@ -12,16 +12,11 @@
 
 ActiveRecord::Schema.define(version: 20170806110010) do
 
-  create_table "aliases", force: :cascade do |t|
-    t.string "url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "entries", force: :cascade do |t|
-    t.string "url"
+    t.string "url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["url"], name: "index_entries_on_url", unique: true
   end
 
 end
