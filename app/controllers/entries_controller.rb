@@ -9,23 +9,17 @@ class EntriesController < ApplicationController
 
   # GET /entries/new
   def new
-    @entry = Entry.new
+    if params["url"].present?
+      create_from_url params["url"]
+    else
+      @entry = Entry.new
+    end
   end
 
   # POST /entries
   # POST /entries.json
   def create
-    @entry = Entry.find_by_url(entry_params["url"]) || Entry.new(entry_params)
-    respond_to do |format|
-      if @entry.save
-        @encoded_id = IdEncoder.encoded_id(@entry.id)
-        format.html {redirect_to entry_url(@encoded_id), notice: 'Entry was successfully created.' }
-        format.json { render :show, status: :created, location: entry_url(@encoded_id) }
-      else
-        format.html { render :new }
-        format.json { render json: @entry.errors, status: :unprocessable_entity }
-      end
-    end
+    create_from_url entry_params["url"]
   end
 
   def redirect
@@ -33,6 +27,19 @@ class EntriesController < ApplicationController
   end
 
   private
+    def create_from_url(url)
+      @entry = Entry.find_by_url(url) || Entry.new(url: url)
+      respond_to do |format|
+        if @entry.save
+          @encoded_id = IdEncoder.encoded_id(@entry.id)
+          format.html {redirect_to entry_url(@encoded_id), notice: 'Entry was successfully created.' }
+          format.json { render :show, status: :created, location: entry_url(@encoded_id) }
+        else
+          format.html { render :new }
+          format.json { render json: @entry.errors, status: :unprocessable_entity }
+        end
+      end
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_entry
       @encoded_id = params["id"]

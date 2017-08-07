@@ -10,5 +10,9 @@
 
   <body>
     <%= yield %>
+    <p>
+      Drag the following link to your toolbar to create an on-the-fly shortener!
+    </p>
+    <%= link_to "Shorten This", "javascript:void(location.href='#{new_entry_url}?url='+encodeURIComponent(location.href))" %>
   </body>
 </html>
