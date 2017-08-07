@@ -1,24 +1,26 @@
-# README
+# Shorty, a URL-Shortening Service
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Shorty is a simple Rails app that can provide URL-shortening services either through a simple JSON API or through the web app.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+### The smallest URL-compatible URLs
+Shorty works by converting your URLs into a Base-65-encoded number for the smallest possible URL.
 
-* System dependencies
+### URL Toolbar integration
+Shorty comes with a link you can drag to your toolbar to provide URL-shortening services from the current page you are currently browsing.
 
-* Configuration
+## Requirements
 
-* Database creation
+Ruby 2.2+ / Rails 5
 
-* Database initialization
+## Deployment
 
-* How to run the test suite
+1. `bundle install`
+2. `rake db:migrate`
+3. `bin/rails server`
 
-* Services (job queues, cache servers, search engines, etc.)
+## Running the test suite
 
-* Deployment instructions
+`bin/rails test`
 
-* ...
