@@ -10,6 +10,8 @@ class EntriesController < ApplicationController
   # GET /entries/new
   def new
     if params["url"].present?
+      # If there is an url parameter, it came from the Javascript
+      # bookmarklet and we can immediately create it.
       create_from_url params["url"]
     else
       @entry = Entry.new
@@ -27,7 +29,10 @@ class EntriesController < ApplicationController
   end
 
   private
+
     def create_from_url(url)
+      # If there is an existing entry for that URL, use that.
+      # Otherwise, make a new one.
       @entry = Entry.find_by_url(url) || Entry.new(url: url)
       respond_to do |format|
         if @entry.save
@@ -40,6 +45,7 @@ class EntriesController < ApplicationController
         end
       end
     end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_entry
       @encoded_id = params["id"]
